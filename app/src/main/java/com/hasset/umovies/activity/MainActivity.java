@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String API_KEY = "19cc83360dbb0af4a3d635c0227fa8da";
+    private static final String API_KEY = "COPY FROM api_key.txt";
 
     RecyclerView recyclerView;
 
