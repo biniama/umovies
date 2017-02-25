@@ -16,27 +16,54 @@ import java.util.List;
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
 
     private List<Movie> movies;
-    private int rowLayout;
     private Context context;
 
-    protected static class GalleryViewHolder extends RecyclerView.ViewHolder {
+    private GalleryOnClickHandler clickHandler;
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface GalleryOnClickHandler {
+        void onClick(Movie movie);
+    }
+
+    public GalleryAdapter(GalleryOnClickHandler clickHandler, Context context) {
+        this.clickHandler = clickHandler;
+        this.context = context;
+    }
+
+    public GalleryAdapter(List<Movie> movies, Context context) {
+        this.movies = movies;
+        this.context = context;
+    }
+
+    public class GalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView thumbnail;
 
         public GalleryViewHolder(View itemView) {
             super(itemView);
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+            itemView.setOnClickListener(this);
         }
-    }
 
-    public GalleryAdapter(List<Movie> movies, int rowLayout, Context context) {
-        this.movies = movies;
-        this.rowLayout = rowLayout;
-        this.context = context;
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Movie movie = movies.get(adapterPosition);
+            clickHandler.onClick(movie);
+        }
     }
 
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        int rowLayout = R.layout.gallery_thumbnail;
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new GalleryViewHolder(view);
     }
@@ -51,10 +78,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     @Override
     public int getItemCount() {
+        if (movies == null)
+            return 0;
         return movies.size();
     }
 
     String constructImagePath(String posterPath) {
-        return "http://image.tmdb.org/t/p/w780".concat(posterPath);
+        return "http://image.tmdb.org/t/p/w500".concat(posterPath);
     }
 }
