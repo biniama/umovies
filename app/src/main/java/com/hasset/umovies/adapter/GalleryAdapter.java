@@ -13,6 +13,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
 
     private List<Movie> movies;
@@ -44,11 +47,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     public class GalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView thumbnail;
+        @BindView(R.id.thumbnail) ImageView thumbnail;
 
         public GalleryViewHolder(View itemView) {
             super(itemView);
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -73,6 +76,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         Picasso.with(context)
                 .load(constructImagePath(movies.get(position).getPosterPath()))
+                .placeholder(R.drawable.movie_placeholder)
                 .into(holder.thumbnail);
     }
 

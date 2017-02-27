@@ -13,17 +13,20 @@ import com.hasset.umovies.model.Movie;
 import com.hasset.umovies.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.hasset.umovies.utils.Util.constructImagePath;
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
 
-    ImageView detailImageView;
-    RatingBar ratingBar;
-    TextView title;
-    TextView releaseDate;
-    TextView overview;
+    @BindView(R.id.detail_image_view) ImageView detailImageView;
+    @BindView(R.id.rating_bar) RatingBar ratingBar;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.release_date) TextView releaseDate;
+    @BindView(R.id.overview) TextView overview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,11 +37,7 @@ public class DetailActivity extends AppCompatActivity {
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        detailImageView = (ImageView) findViewById(R.id.detail_image_view);
-        ratingBar = (RatingBar) findViewById(R.id.rating_bar);
-        title = (TextView) findViewById(R.id.title);
-        releaseDate = (TextView) findViewById(R.id.release_date);
-        overview = (TextView) findViewById(R.id.overview);
+        ButterKnife.bind(this);
 
         Bundle bundle = this.getIntent().getExtras();
 

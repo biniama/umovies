@@ -28,14 +28,14 @@
 
         <TextView
             android:id="@+id/release_date"
-            android:layout_width="192dp"
+            android:layout_width="@dimen/textViewReleaseDateWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:textAlignment="viewStart" />
 
         <RatingBar
             android:id="@+id/rating_bar"
-            android:layout_width="197dp"
+            android:layout_width="@dimen/ratingBarWidth"
             android:layout_height="wrap_content" />
 
         <TextView

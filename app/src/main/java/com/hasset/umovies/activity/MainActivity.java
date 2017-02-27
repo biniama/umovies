@@ -18,13 +18,14 @@ import com.hasset.umovies.R;
 import com.hasset.umovies.adapter.GalleryAdapter;
 import com.hasset.umovies.model.Movie;
 import com.hasset.umovies.model.MovieResponse;
-import com.hasset.umovies.model.Theme;
 import com.hasset.umovies.rest.RetrofitApiClient;
 import com.hasset.umovies.rest.TmdbApiInterface;
 import com.hasset.umovies.utils.Constants;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -34,12 +35,15 @@ public class MainActivity extends AppCompatActivity implements GalleryAdapter.Ga
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String API_KEY = "19cc83360dbb0af4a3d635c0227fa8da";
 
-    private RecyclerView recyclerView;
+    private static final String TOP_RATED = "top-rated";
+    private static final String POPULAR = "popular";
+
+    @BindView(R.id.movies_recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+
     private CompositeDisposable compositeDisposable;
     private GalleryAdapter galleryAdapter;
     private TmdbApiInterface apiService;
-
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +62,16 @@ public class MainActivity extends AppCompatActivity implements GalleryAdapter.Ga
         apiService = RetrofitApiClient.getClient().create(TmdbApiInterface.class);
         compositeDisposable = new CompositeDisposable();
 
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
 
-        getMovieFromAPI(Theme.TOP_RATED);
+        getMovieFromAPI(TOP_RATED);
 
         progressBar.setVisibility(View.GONE);
     }
 
     private void initRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.movies_recycler_view);
+
+        ButterKnife.bind(this);
         recyclerView.setHasFixedSize(true);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
@@ -77,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements GalleryAdapter.Ga
         recyclerView.setAdapter(galleryAdapter);
     }
 
-    private void getMovieFromAPI(Theme theme) {
+    private void getMovieFromAPI(String theme) {
 
-        if (theme.equals(Theme.TOP_RATED)) {
+        if (theme.equals(TOP_RATED)) {
 
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 Log.d(TAG, "1 onResponse: running on main thread");
@@ -92,14 +96,14 @@ public class MainActivity extends AppCompatActivity implements GalleryAdapter.Ga
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponse, this::handleError));
 
-        } else if (theme.equals(Theme.POPULAR)) {
+        } else if (theme.equals(POPULAR)) {
 
             compositeDisposable.add(apiService.getPopularMovies(API_KEY)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponse, this::handleError));
         } else {
-            Log.e(TAG, "Unknown Theme:" + theme.toString());
+            Log.e(TAG, "Unknown Theme:" + theme);
         }
     }
 
@@ -140,13 +144,13 @@ public class MainActivity extends AppCompatActivity implements GalleryAdapter.Ga
 
             case R.id.action_top_rated:
                 Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
-                getMovieFromAPI(Theme.TOP_RATED);
+                getMovieFromAPI(TOP_RATED);
                 Toast.makeText(this, "Top Rated Loaded", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_popular:
                 Toast.makeText(this, "Popular", Toast.LENGTH_SHORT).show();
-                getMovieFromAPI(Theme.POPULAR);
+                getMovieFromAPI(POPULAR);
                 Toast.makeText(this, "Popular Loaded", Toast.LENGTH_SHORT).show();
                 break;
             default:
