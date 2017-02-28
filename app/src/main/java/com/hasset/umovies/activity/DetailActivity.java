@@ -34,8 +34,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ActionBar actionBar = getSupportActionBar();
+
         // Enabling Up / Back navigation
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
 
@@ -44,14 +46,16 @@ public class DetailActivity extends AppCompatActivity {
         if (bundle != null) {
             Movie movie = (Movie) bundle.get(Constants.MOVIE);
 
-            title.setText(movie.getTitle());
+            if (movie != null) {
+                title.setText(movie.getTitle());
 
-            Picasso.with(getApplicationContext())
-                    .load(constructImagePath(movie.getPosterPath()))
-                    .into(detailImageView);
-            ratingBar.setRating(Float.parseFloat(movie.getPopularity().toString()));
-            releaseDate.setText(movie.getReleaseDate());
-            overview.setText(movie.getOverview());
+                Picasso.with(getApplicationContext())
+                        .load(constructImagePath(movie.getPosterPath()))
+                        .into(detailImageView);
+                ratingBar.setRating(Float.parseFloat(movie.getPopularity().toString()));
+                releaseDate.setText(movie.getReleaseDate());
+                overview.setText(movie.getOverview());
+            }
         }
     }
 
