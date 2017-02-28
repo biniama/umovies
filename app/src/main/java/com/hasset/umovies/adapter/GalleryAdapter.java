@@ -40,11 +40,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         this.context = context;
     }
 
-    public GalleryAdapter(List<Movie> movies, Context context) {
-        this.movies = movies;
-        this.context = context;
-    }
-
     public class GalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.thumbnail) ImageView thumbnail;
@@ -76,6 +71,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         Picasso.with(context)
                 .load(constructImagePath(movies.get(position).getPosterPath()))
+                //.resize(680, 900)
                 .placeholder(R.drawable.movie_placeholder)
                 .into(holder.thumbnail);
     }
@@ -87,7 +83,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         return movies.size();
     }
 
-    String constructImagePath(String posterPath) {
-        return "http://image.tmdb.org/t/p/w500".concat(posterPath);
+    private String constructImagePath(String posterPath) {
+        return "http://image.tmdb.org/t/p/w185".concat(posterPath);
     }
 }
