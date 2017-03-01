@@ -51,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 Picasso.with(getApplicationContext())
                         .load(constructImagePath(movie.getPosterPath()))
+                        .placeholder(R.drawable.movie_placeholder)
                         .into(detailImageView);
                 ratingBar.setRating(Float.parseFloat(movie.getPopularity().toString()));
                 releaseDate.setText(movie.getReleaseDate());
